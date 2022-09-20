@@ -15,6 +15,6 @@ namespace WeatherAPI.Services
 
     Task<Forecast> GetForecast(string uri);
 
-    Task<TimeZones> GetTimezones();
+    Task<TimeZones> GetZones();
   }
 }

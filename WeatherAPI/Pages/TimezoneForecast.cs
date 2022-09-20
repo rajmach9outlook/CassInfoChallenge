@@ -25,7 +25,7 @@ namespace WeatherAPI.Pages
 
     protected override async Task OnInitializedAsync()
     {
-      TimeZones timezoneInfo = await WeatherDataService.GetTimezones();
+      TimeZones timezoneInfo = await WeatherDataService.GetZones();
 
       if (timezoneInfo == null) return;
 

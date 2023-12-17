@@ -1,0 +1,63 @@
+@page "/fetchshipper"
+@inject HttpClient Http
+@using CassInfoChallenge.Core.Data;
+@using CassInfoChallenge.Services;
+
+<div class="form-group row">
+    <label class="col-sm-10" style="color: #8223cf;font-size:28px;text-align:center"><u>Retrieve Shippers List</u></label>
+</div>
+
+
+@if (loading)
+{
+    
+}
+else
+{
+                @if (Shippers != null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sh in Shippers)
+                            {
+                                <tr>
+                                    <td>@sh.ID</td>
+                                    <td><a href="@($"/fetchshipments/{sh.ID}")" class="btn btn-link btn-sm">@sh.Name</a></td>
+                                </tr>
+                            }
+                            </tbody>
+                    </table>
+
+                }
+                else
+                {
+                    <p><em>No shippers found!</em></p>
+                }          
+}
+
+
+@code {
+
+  private async Task SearchShippers()
+  {
+      try
+      {
+          Shippers = null;
+
+          Shippers = (await ShipperService.GetAllShippers()).ToList();
+
+          loading = false;
+      }
+      catch (Exception ex)
+      {
+          throw ex;
+      }
+  }
+
+}

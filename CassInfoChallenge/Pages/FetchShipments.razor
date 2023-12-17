@@ -1,0 +1,76 @@
+@page "/fetchshipments"
+@page "/fetchshipments/{shipperid:int}"
+@inject HttpClient Http
+@using CassInfoChallenge.Core.Data;
+@using CassInfoChallenge.Services;
+
+<div class="form-group row">
+    <label class="col-sm-10" style="color: #8223cf;font-size:28px;text-align:center"><u>Retrieve Shippers Shipments</u></label>
+</div>
+
+<div class="form-group row" hidden>
+    <label class="col-sm-1">Shipper Id: </label>
+    <input type="number" id="shipperIdInput" class="form-control col-sm-3" @bind-value="shipperid" />
+</div>
+
+@if (loading)
+{
+    
+}
+else
+{
+    @if (Shipments != null && Shipments.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Shipment Id</th>
+                    <th>Shipper Name</th>
+                    <th>Carrier Name</th>
+                    <th>Shipment Description</th>
+                    <th>Shipment Weight</th>
+                    <th>Shipment Rate Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sh in Shipments)
+                {
+                    <tr>
+                        <td>@sh.shipment_id</td>
+                        <td>@sh.shipper_name</td>
+                        <td>@sh.carrier_name</td>
+                        <td>@sh.shipment_description</td>
+                        <td>@sh.shipment_weight</td>
+                        <td>@sh.shipment_rate_description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+    else
+    {
+        <p><em>Click on the shipper name on Shipper's page to retrieve the shipment details.</em></p>
+    }
+}
+
+
+@code {
+
+    private async Task SearchShipments()
+    {
+        try
+        {
+            Shipments = null;
+
+            Shipments = (await ShipperService.GetShipperShipmentsDetail(this.shipperid)).ToList();
+
+            loading = false;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+}

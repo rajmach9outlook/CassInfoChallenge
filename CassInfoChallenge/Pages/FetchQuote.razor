@@ -1,0 +1,68 @@
+@page "/fetchquote"
+@inject HttpClient Http
+@using CassInfoChallenge.Core.Data;
+@using CassInfoChallenge.Services;
+@using CassInfoChallenge.Pages;
+
+
+<div class="form-group row">
+    <label class="col-sm-10" style="color: #8223cf;font-size:28px;text-align:center"><u>Retrieve Random Quote</u></label>
+</div>
+
+<div class="form-group row">
+    <input type="button" value="Get Random Quote" @onclick="@GetQuote" />
+</div>
+
+@if (loading)
+{
+    <p><em>Please click the button to get a random quote</em></p>
+}
+else
+{
+    @if (quoteData != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Content</th>
+                    <th>Author</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@quoteData.content</td>
+                    <td>@quoteData.author</td>                    
+                </tr>
+            </tbody>
+        </table>       
+    }
+    else
+    {
+        <p><em>No random quote found!</em></p>
+    }
+}
+
+@code {
+
+  private async Task GetQuote()
+  {
+      try
+      {
+          quoteData = null;
+
+          quoteData = await QuoteService.GetRandomQuote();
+
+          if (quoteData != null)
+          {
+              //forecast = await QuoteService.GetForecast(weatherData.properties.forecast.Replace("https://api.weather.gov/", string.Empty));
+          }
+
+          loading = false;
+      }
+      catch (Exception ex)
+      {
+          throw ex;
+      }
+  }
+
+}
